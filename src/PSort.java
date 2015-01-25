@@ -1,5 +1,5 @@
 
-public class PSort {
+public class PSort implements Runnable{
 	// should use runnable.
 	public static void parallelSort(int[] a, int begin, int end){
 		// going to start by implementing quicksort without any threads.
@@ -55,6 +55,12 @@ public class PSort {
 		for (int i = 0; i < arr.length; i ++) {
 			System.out.print(arr[i] + " ");
 		}
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
