@@ -83,17 +83,21 @@ public class PSort {
 	}
 
 	public static void parallelSort(int[] a, int begin, int end) {
-		ExecutorService es = Executors.newSingleThreadExecutor();
-		Future<?> f = es.submit(new PSortRunnable(a, begin, end));
-		while (!f.isDone());
-		es.shutdown();
+		Future<?> f = threadPool.submit(new PSortRunnable(a, begin, end));
+		try {
+			f.get();
+		}
+		catch (Exception exc){
+			// TODO
+			System.out.println("EXCEPTION");
+		}
 		threadPool.shutdown();
 		
 	}
 
 	public static void main(String[] args) {
 		Random rand = new Random();
-		int size = 100000;
+		int size = 10000;
 		int[] arr = new int[size];
 		for (int k = 0; k < arr.length; k++){
 			arr[k] = rand.nextInt(2348761);
