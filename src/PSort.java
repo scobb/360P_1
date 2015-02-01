@@ -45,13 +45,33 @@ public class PSort {
 					j--;
 				}
 			}
+			Future<?> f1 = null;
 			if (begin < j) {
 				// if we have an unsorted first half, recurse on it
-				threadPool.submit(new PSortRunnable(a, begin, j));
+				f1 = threadPool.submit(new PSortRunnable(a, begin, j));
 			}
+			Future<?> f2 = null;
 			if (i < end) {
 				// if we have an unsorted second half, recurse on it
-				threadPool.submit(new PSortRunnable(a, i, end));
+				f2 = threadPool.submit(new PSortRunnable(a, i, end));
+			}
+			if (f1 != null){
+				try {
+					f1.get();
+				}
+				catch (Exception exc){
+					// TODO
+					System.out.println("EXCEPTION");
+				}
+			}
+			if (f2 != null){
+				try {
+					f2.get();
+				}
+				catch (Exception exc){
+					// TODO
+					System.out.println("EXCEPTION");
+				}
 			}
 		}
 
@@ -64,25 +84,31 @@ public class PSort {
 
 	public static void parallelSort(int[] a, int begin, int end) {
 		ExecutorService es = Executors.newSingleThreadExecutor();
-		es.execute(new PSortRunnable(a, begin, end));
+		Future<?> f = es.submit(new PSortRunnable(a, begin, end));
+		while (!f.isDone());
 		es.shutdown();
-		while (!es.isTerminated());
 		threadPool.shutdown();
+		
 	}
 
 	public static void main(String[] args) {
 		Random rand = new Random();
-		int size = 100000000;
+		int size = 100000;
 		int[] arr = new int[size];
 		for (int k = 0; k < arr.length; k++){
-			arr[k] = rand.nextInt();
+			arr[k] = rand.nextInt(2348761);
 		}
+		arr[0] = 0;
+		arr[1] = 0;
 		System.out.println("Sorting...");
 		long startTime = System.currentTimeMillis();
 		parallelSort(arr, 0, arr.length - 1);
 		long elapsed = System.currentTimeMillis() - startTime;
 		for (int i = 0; i < arr.length-1; i++){
-			assert(arr[i] < arr[i+1]);
+			if (arr[i] > arr[i+1]){
+				System.out.println("arr[" + i + "] > arr[" + (i+1) + "].");
+				assert false;
+			}
 		}
 		System.out.println("Sorted array of size " + size + " in " + elapsed/1000.0 + " seconds.");
 		
