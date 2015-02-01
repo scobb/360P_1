@@ -1,7 +1,9 @@
 import java.util.Random;
 import java.util.concurrent.*;
+
 public class PSort {
 	public static ExecutorService threadPool = Executors.newCachedThreadPool();
+
 	public static class PSortRunnable implements Runnable {
 		private int begin;
 		private int end;
@@ -55,20 +57,18 @@ public class PSort {
 				// if we have an unsorted second half, recurse on it
 				f2 = threadPool.submit(new PSortRunnable(a, i, end));
 			}
-			if (f1 != null){
+			if (f1 != null) {
 				try {
 					f1.get();
-				}
-				catch (Exception exc){
+				} catch (Exception exc) {
 					// TODO
 					System.out.println("EXCEPTION");
 				}
 			}
-			if (f2 != null){
+			if (f2 != null) {
 				try {
 					f2.get();
-				}
-				catch (Exception exc){
+				} catch (Exception exc) {
 					// TODO
 					System.out.println("EXCEPTION");
 				}
@@ -86,20 +86,19 @@ public class PSort {
 		Future<?> f = threadPool.submit(new PSortRunnable(a, begin, end));
 		try {
 			f.get();
-		}
-		catch (Exception exc){
+		} catch (Exception exc) {
 			// TODO
 			System.out.println("EXCEPTION");
 		}
 		threadPool.shutdown();
-		
+
 	}
 
 	public static void main(String[] args) {
 		Random rand = new Random();
 		int size = 10000;
 		int[] arr = new int[size];
-		for (int k = 0; k < arr.length; k++){
+		for (int k = 0; k < arr.length; k++) {
 			arr[k] = rand.nextInt(2348761);
 		}
 		arr[0] = 0;
@@ -108,14 +107,15 @@ public class PSort {
 		long startTime = System.currentTimeMillis();
 		parallelSort(arr, 0, arr.length - 1);
 		long elapsed = System.currentTimeMillis() - startTime;
-		for (int i = 0; i < arr.length-1; i++){
-			if (arr[i] > arr[i+1]){
-				System.out.println("arr[" + i + "] > arr[" + (i+1) + "].");
+		for (int i = 0; i < arr.length - 1; i++) {
+			if (arr[i] > arr[i + 1]) {
+				System.out.println("arr[" + i + "] > arr[" + (i + 1) + "].");
 				assert false;
 			}
 		}
-		System.out.println("Sorted array of size " + size + " in " + elapsed/1000.0 + " seconds.");
-		
+		System.out.println("Sorted array of size " + size + " in " + elapsed
+				/ 1000.0 + " seconds.");
+
 	}
 
 }

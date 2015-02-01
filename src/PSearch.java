@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
@@ -35,6 +37,10 @@ public class PSearch {
 
 	public static int parallelSearch(int x, int[] A, int numThreads) {
 		// need to use Callable
+		if (numThreads <= 0){
+			// TODO - throw an exception?
+			return -1;
+		}
 		ExecutorService executorService = Executors
 				.newFixedThreadPool(numThreads);
 		int num_per_thread = A.length / numThreads;
@@ -70,11 +76,41 @@ public class PSearch {
 	}
 
 	public static void main(String[] args) {
-		int[] arr = { 14, 12, 16, 1, 3, 18, 7, 76 };
-		int target = 16;
+		int size = 100;
+		int arr[] = new int[size];
+		Random rand = new Random();
+		for (int i = 0; i < size; i++){
+			arr[i] = rand.nextInt();
+		}
+		int target_ind = rand.nextInt(size);
+		int target = arr[target_ind];
 		int num_threads = 4;
+		System.out.println("Testing a value in array of size " + size);
 		int result = PSearch.parallelSearch(target, arr, num_threads);
-		System.out.println("Result: " + result);
+		assert result == target_ind;
+		
+		System.out.println("Testing a value that is not contained in the array.");
+		Integer int_array[] = new Integer[size];
+		for (int i = 0; i < size; i++){
+			int_array[i] = arr[i];
+		}
+		ArrayList<Integer> bob = new ArrayList<Integer>(Arrays.asList(int_array));
+		int not_contained = 0;
+		while (bob.contains(not_contained)){
+			not_contained += 1;
+		}
+		result = PSearch.parallelSearch(not_contained, arr, num_threads);
+		assert result == -1;
+		
+		System.out.println("Testing on an empty array.");
+		result = PSearch.parallelSearch(target, new int[0], num_threads);
+		assert result == -1;
+		
+		System.out.println("Testing with no threads.");
+		result = PSearch.parallelSearch(target, new int[0], 0);
+		assert result == -1;
+		
+		System.out.println("Tests passed.");
 	}
 
 }
