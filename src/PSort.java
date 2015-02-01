@@ -44,22 +44,13 @@ public class PSort {
 					j--;
 				}
 			}
-			Future<?> f1 = null;
 			if (begin < j) {
 				// if we have an unsorted first half, recurse on it
-				f1 = threadPool.submit(new PSortRunnable(a, begin, j));
+				threadPool.submit(new PSortRunnable(a, begin, j));
 			}
-			Future<?> f2 = null;
 			if (i < end) {
 				// if we have an unsorted second half, recurse on it
-				f2 = threadPool.submit(new PSortRunnable(a, i, end));
-			}
-			if (f1 != null){
-				while (!f1.isDone());
-			}
-
-			if (f2 != null){
-				while (!f2.isDone());
+				threadPool.submit(new PSortRunnable(a, i, end));
 			}
 		}
 
@@ -79,19 +70,20 @@ public class PSort {
 	}
 
 	public static void main(String[] args) {
-		int size = 50;
+		int size = 10000;
 		int[] arr = new int[size];
 		for (int k = 0; k < arr.length; k++){
 			arr[k] = size - k;
 		}
-		for (int k = 0; k < arr.length; k++) {
-			System.out.print(arr[k] + " ");
-		}
-		System.out.println();
+		System.out.println("Sorting...");
+		long startTime = System.currentTimeMillis();
 		parallelSort(arr, 0, arr.length - 1);
-		for (int i = 0; i < arr.length; i++) {
-			System.out.print(arr[i] + " ");
+		long elapsed = System.currentTimeMillis() - startTime;
+		for (int i = 0; i < arr.length-1; i++){
+			assert(arr[i] < arr[i+1]);
 		}
+		System.out.println("Sorted array of size " + size + " in " + elapsed/1000.0 + " seconds.");
+		
 	}
 
 }
