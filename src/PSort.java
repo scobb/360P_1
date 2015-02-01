@@ -1,4 +1,6 @@
+import java.util.concurrent.*;
 public class PSort {
+	public static ExecutorService threadPool = Executors.newCachedThreadPool();
 	public static class PSortRunnable implements Runnable {
 		private int begin;
 		private int end;
@@ -42,29 +44,23 @@ public class PSort {
 					j--;
 				}
 			}
-			Thread first = null;
+			Future<?> f1 = null;
 			if (begin < j) {
 				// if we have an unsorted first half, recurse on it
-				first = new Thread(new PSortRunnable(a, begin, j));
-				first.start();
+				f1 = threadPool.submit(new PSortRunnable(a, begin, j));
 			}
-			Thread second = null;
+			Future<?> f2 = null;
 			if (i < end) {
 				// if we have an unsorted second half, recurse on it
-				second = new Thread(new PSortRunnable(a, i, end));
-				second.start();
+				f2 = threadPool.submit(new PSortRunnable(a, i, end));
 			}
-			try {
-				if (first != null) {
-					first.join();
-				}
-				if (second != null) {
-					second.join();
-				}
-			} catch (Exception exc) {
-
+			if (f1 != null){
+				while (!f1.isDone());
 			}
 
+			if (f2 != null){
+				while (!f2.isDone());
+			}
 		}
 
 		public static void swap(int[] a, int ind_a, int ind_b) {
@@ -74,27 +70,20 @@ public class PSort {
 		}
 	}
 
-	// should use runnable.
 	public static void parallelSort(int[] a, int begin, int end) {
-		// going to start by implementing quicksort without any threads.
-
-		Thread t1 = new Thread(new PSortRunnable(a, begin, end));
-		t1.start();
-		try {
-			t1.join();
-		} catch (Exception exc) {
-
-		}
-	}
-
-	public static void swap(int[] a, int ind_a, int ind_b) {
-		int tmp = a[ind_a];
-		a[ind_a] = a[ind_b];
-		a[ind_b] = tmp;
+		ExecutorService es = Executors.newSingleThreadExecutor();
+		es.execute(new PSortRunnable(a, begin, end));
+		es.shutdown();
+		while (!es.isTerminated());
+		threadPool.shutdown();
 	}
 
 	public static void main(String[] args) {
-		int[] arr = { 17, 4, 8, 1, 3, 2, 5, 7, 11, 10, 15 };
+		int size = 50;
+		int[] arr = new int[size];
+		for (int k = 0; k < arr.length; k++){
+			arr[k] = size - k;
+		}
 		for (int k = 0; k < arr.length; k++) {
 			System.out.print(arr[k] + " ");
 		}
