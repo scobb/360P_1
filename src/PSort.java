@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.concurrent.*;
 public class PSort {
 	public static ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -70,10 +71,11 @@ public class PSort {
 	}
 
 	public static void main(String[] args) {
-		int size = 10000;
+		Random rand = new Random();
+		int size = 100000000;
 		int[] arr = new int[size];
 		for (int k = 0; k < arr.length; k++){
-			arr[k] = size - k;
+			arr[k] = rand.nextInt();
 		}
 		System.out.println("Sorting...");
 		long startTime = System.currentTimeMillis();
