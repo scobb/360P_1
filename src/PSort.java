@@ -99,27 +99,4 @@ public class PSort {
 
 	}
 
-	public static void main(String[] args) {
-		Random rand = new Random();
-		int size = 10000;
-		int[] arr = new int[size];
-		for (int k = 0; k < arr.length; k++) {
-			arr[k] = rand.nextInt(2348761);
-		}
-		arr[0] = 0;
-		arr[1] = 0;
-		System.out.println("Sorting...");
-		long startTime = System.currentTimeMillis();
-		parallelSort(arr, 0, arr.length);
-		long elapsed = System.currentTimeMillis() - startTime;
-		for (int i = 0; i < arr.length - 1; i++) {
-			if (arr[i] > arr[i + 1]) {
-				System.out.println("arr[" + i + "] > arr[" + (i + 1) + "].");
-			}
-		}
-		System.out.println("Sorted array of size " + size + " in " + elapsed
-				/ 1000.0 + " seconds.");
-
-	}
-
 }
