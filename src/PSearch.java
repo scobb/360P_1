@@ -36,18 +36,29 @@ public class PSearch {
 	}
 
 	public static int parallelSearch(int x, int[] A, int numThreads) {
-		// need to use Callable
 		if (numThreads <= 0){
-			// TODO - throw an exception?
 			return -1;
 		}
 		ExecutorService executorService = Executors
 				.newFixedThreadPool(numThreads);
+		
+		// these values will help us make our start/end indices
 		int num_per_thread = A.length / numThreads;
-		int remainder = A.length - num_per_thread;
+		int remainder = A.length - numThreads * num_per_thread;
+		
+		// this is where we'll save results
 		ArrayList<Future<Integer>> results = new ArrayList<Future<Integer>>();
+		
+		// start index begins at 0
 		int start_ind = 0;
+		
 		for (int i = 0; i < numThreads; i++) {
+			if (num_per_thread == 0 && remainder == 0){
+				// more threads than the length of the array. Search should be complete.
+				break;
+			}
+			
+			// if there's still work to do, let's divide it equitably.
 			try {
 				int end_ind = start_ind + num_per_thread;
 				if (remainder > 0) {
@@ -56,8 +67,9 @@ public class PSearch {
 				}
 				results.add(executorService.submit(new SearchCallable(A,
 						start_ind, end_ind, x)));
-				start_ind += num_per_thread;
+				start_ind = end_ind;
 			} catch (Exception exc) {
+				System.out.println("EXCEPTION in execute: " + exc.getMessage());
 
 			}
 		}
@@ -69,6 +81,7 @@ public class PSearch {
 				}
 			} catch (Exception exc) {
 				//TODO - handle ??
+				System.out.println("EXCEPTION in get: " + exc.getMessage());
 
 			}
 		}

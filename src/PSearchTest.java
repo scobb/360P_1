@@ -8,7 +8,8 @@ import org.junit.Test;
 
 
 public class PSearchTest {
-	int num_threads = 4;
+	// using an odd number of tests as the best to force remainders most of the time
+	int num_threads = 3;
 	Random rand = new Random();
 	
 	/*
@@ -41,6 +42,26 @@ public class PSearchTest {
 	/*
 	 * Tests
 	 */
+	
+	@Test
+	public void zeroThreadTest(){
+		int arr[] = new int[100];
+		arr[0] = 1;
+		assertEquals(-1, PSearch.parallelSearch(1, arr, 0));
+	}
+	
+	@Test
+	public void manyThreadTest(){
+		int arr[] = new int[100];
+		arr[99] = 1;
+		assertEquals(99, PSearch.parallelSearch(1, arr, 500));
+	}
+	@Test
+	public void noRemainderTest(){
+		int arr[] = new int[99];
+		arr[98] = 1;
+		assertEquals(98, PSearch.parallelSearch(1, arr, num_threads));
+	}
 
 	@Test
 	public void randomSuccesfulTest() {

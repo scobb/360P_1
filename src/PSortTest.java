@@ -10,11 +10,15 @@ import org.junit.Test;
 
 
 public class PSortTest {
+	
+	// Helper method
 	public void checkArraySorted(int[] arr){
 		for (int i = 0; i < arr.length-1; i++){
 			assertTrue(arr[i] <= arr[i+1]);
 		}
 	}
+	
+	// Tests
 
 	@Test
 	public void emptyArrayTest() {
