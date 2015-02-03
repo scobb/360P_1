@@ -13,7 +13,7 @@ public class PSortTest {
 	
 	// Helper method
 	public void checkArraySorted(int[] arr){
-		for (int i = 0; i < arr.length-1; i++){
+		for (int i = 0; i < arr.length - 1; i++){
 			assertTrue(arr[i] <= arr[i+1]);
 		}
 	}
@@ -32,26 +32,26 @@ public class PSortTest {
 	@Test
 	public void testArraySame() {
 		int[] arr = {1, 1, 1, 1, 1};
-		PSort.parallelSort(arr, 0, arr.length-1);
+		PSort.parallelSort(arr, 0, arr.length);
 		checkArraySorted(arr);
 	}
 	@Test
 	public void testArraySorted() {
 		int[] arr = {1, 2, 3, 4, 5};
-		PSort.parallelSort(arr, 0, arr.length-1);
+		PSort.parallelSort(arr, 0, arr.length);
 		checkArraySorted(arr);
 	}
 	
 	@Test
 	public void testArraySortedDescending() {
 		int[] arr = {5, 4, 3, 2, 1};
-		PSort.parallelSort(arr, 0, arr.length-1);
+		PSort.parallelSort(arr, 0, arr.length);
 		checkArraySorted(arr);
 	}
 	@Test
 	public void testNegative() {
 		int[] arr = {-5, 4, 3, -2, 1};
-		PSort.parallelSort(arr, 0, arr.length-1);
+		PSort.parallelSort(arr, 0, arr.length);
 		checkArraySorted(arr);
 	}
 	@Test
@@ -61,7 +61,7 @@ public class PSortTest {
 		for (int i = 0; i < arr.length; i++){
 			arr[i] = rand.nextInt();
 		}
-		PSort.parallelSort(arr, 0, arr.length-1);
+		PSort.parallelSort(arr, 0, arr.length);
 		checkArraySorted(arr);
 	}
 	@Test
@@ -71,7 +71,7 @@ public class PSortTest {
 		for (int i = 0; i < arr.length; i++){
 			arr[i] = rand.nextInt();
 		}
-		PSort.parallelSort(arr, 0, arr.length-1);
+		PSort.parallelSort(arr, 0, arr.length);
 		checkArraySorted(arr);
 	}
 

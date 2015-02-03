@@ -20,7 +20,7 @@ public class PSort {
 		}
 
 		private void qsort() {
-			if (end == 0) {
+			if (end == -1) {
 				// handle empty array case
 				return;
 			}
@@ -88,7 +88,7 @@ public class PSort {
 
 	public static void parallelSort(int[] a, int begin, int end) {
 		threadPool = Executors.newCachedThreadPool();
-		Future<?> f = threadPool.submit(new PSortRunnable(a, begin, end));
+		Future<?> f = threadPool.submit(new PSortRunnable(a, begin, end-1));
 		try {
 			f.get();
 		} catch (Exception exc) {
@@ -115,7 +115,6 @@ public class PSort {
 		for (int i = 0; i < arr.length - 1; i++) {
 			if (arr[i] > arr[i + 1]) {
 				System.out.println("arr[" + i + "] > arr[" + (i + 1) + "].");
-				assert false;
 			}
 		}
 		System.out.println("Sorted array of size " + size + " in " + elapsed
