@@ -1,0 +1,18 @@
+Steve Cobb
+Nate Zuiker
+
+EE 360P Programming Assignments for HW 1
+Compilation instructions
+
+$ javac PSort.java
+$ javac PSearch.java
+
+If your Main.java uses the PSearch and PSort classes, you should only need to compile the Main.
+
+$ javac Main.java
+
+Execution will be of your test script:
+
+$ java Main.java
+
+
