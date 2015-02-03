@@ -110,7 +110,7 @@ public class PSort {
 		arr[1] = 0;
 		System.out.println("Sorting...");
 		long startTime = System.currentTimeMillis();
-		parallelSort(arr, 0, arr.length - 1);
+		parallelSort(arr, 0, arr.length);
 		long elapsed = System.currentTimeMillis() - startTime;
 		for (int i = 0; i < arr.length - 1; i++) {
 			if (arr[i] > arr[i + 1]) {
