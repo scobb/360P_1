@@ -2,7 +2,7 @@ import java.util.Random;
 import java.util.concurrent.*;
 
 public class PSort {
-	public static ExecutorService threadPool = Executors.newCachedThreadPool();
+	public static ExecutorService threadPool;
 
 	public static class PSortRunnable implements Runnable {
 		private int begin;
@@ -20,6 +20,10 @@ public class PSort {
 		}
 
 		private void qsort() {
+			if (end == 0) {
+				// handle empty array case
+				return;
+			}
 			// choose a pivot
 			int pivot = begin + (end - begin) / 2;
 			int pivot_value = a[pivot];
@@ -83,12 +87,13 @@ public class PSort {
 	}
 
 	public static void parallelSort(int[] a, int begin, int end) {
+		threadPool = Executors.newCachedThreadPool();
 		Future<?> f = threadPool.submit(new PSortRunnable(a, begin, end));
 		try {
 			f.get();
 		} catch (Exception exc) {
 			// TODO
-			System.out.println("EXCEPTION");
+			System.out.println("EXCEPTION:" + exc.getMessage());
 		}
 		threadPool.shutdown();
 
