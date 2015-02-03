@@ -88,42 +88,4 @@ public class PSearch {
 		return -1;
 	}
 
-	public static void main(String[] args) {
-		int size = 100;
-		int arr[] = new int[size];
-		Random rand = new Random();
-		for (int i = 0; i < size; i++){
-			arr[i] = rand.nextInt();
-		}
-		int target_ind = rand.nextInt(size);
-		int target = arr[target_ind];
-		int num_threads = 4;
-		System.out.println("Testing a value in array of size " + size);
-		int result = PSearch.parallelSearch(target, arr, num_threads);
-		assert result == target_ind;
-		
-		System.out.println("Testing a value that is not contained in the array.");
-		Integer int_array[] = new Integer[size];
-		for (int i = 0; i < size; i++){
-			int_array[i] = arr[i];
-		}
-		ArrayList<Integer> bob = new ArrayList<Integer>(Arrays.asList(int_array));
-		int not_contained = 0;
-		while (bob.contains(not_contained)){
-			not_contained += 1;
-		}
-		result = PSearch.parallelSearch(not_contained, arr, num_threads);
-		assert result == -1;
-		
-		System.out.println("Testing on an empty array.");
-		result = PSearch.parallelSearch(target, new int[0], num_threads);
-		assert result == -1;
-		
-		System.out.println("Testing with no threads.");
-		result = PSearch.parallelSearch(target, new int[0], 0);
-		assert result == -1;
-		
-		System.out.println("Tests passed.");
-	}
-
 }
